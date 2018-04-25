@@ -1,5 +1,12 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+.idea/
+data/
+results/
+
+*.npy
+*.hdf5
+
 *.py[cod]
 *$py.class
 
