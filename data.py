@@ -206,7 +206,10 @@ class dataProcess(object):
         print('Saving to .npy files done.')
 
 
-    def prepare_test_data(self):
+    def prepare_unmakked_test_data(self):
+        pass
+
+    def prepare_marked_test_data(self):
         path_merge = "data\\train\\merge"
         path_test = "data\\test\\images"
         path_label = "data\\test\\labels"

@@ -155,21 +155,39 @@ class myUnet(object):
 		imgs_mask_test = model.predict(imgs_test, batch_size=1, verbose=1)
 		np.save('results\\imgs_mask_test.npy', imgs_mask_test)
 
+
 	def save_img(self):
-
 		print("array to image")
-		imgs = np.load('results\\imgs_mask_test.npy')
-		for i in range(imgs.shape[0]):
-			img = imgs[i]
-			img = array_to_img(img)
-			img.save("results\\%d.jpg"%(i))
+		out_imgs = np.load("results\\imgs_mask_test.npy")
+		print(out_imgs.shape)
+		print(out_imgs.dtype)
+		_, _, in_imgs  = self.load_data()
+		print(in_imgs.shape)
+		print(in_imgs.dtype)
 
+		for i in range(in_imgs.shape[0]):
+			mask_img_array = out_imgs[i]
+			mask_img = array_to_img(mask_img_array)
+			mask_img.save("results\\%d_mask.tif"%(i))
+
+			in_img = in_imgs[i]
+			img = np.zeros((in_img.shape[0], in_img.shape[1], 3), dtype=np.uint8)
+			img[..., 1] = in_img[..., 0] * 255
+			img[..., 0] = mask_img_array[..., 0] * 255
+
+			img = array_to_img(img)
+			img.save("results\\%d.tif"%(i))
+
+			mask_img_array[mask_img_array > 0.5] = 1
+			mask_img_array[mask_img_array <= 0.5] = 0
+			mask_img = array_to_img(mask_img_array)
+			mask_img.save("results\\%d_mask_threshold.tif"%(i))
 
 
 
 if __name__ == '__main__':
 	myunet = myUnet()
-	myunet.train()
+	# myunet.train()
 	myunet.save_img()
 
 
