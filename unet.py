@@ -101,19 +101,11 @@ class myUnet(object):
 		drop3 = AlphaDropout(0.3)(conv3)
 		pool3 = MaxPooling2D(pool_size=(2, 2))(drop3)
 
-		# conv4 = Conv2D(512, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(pool3)
-		# conv4 = Conv2D(512, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv4)
-		# drop4 = Dropout(0.5)(conv4)
-		# pool4 = MaxPooling2D(pool_size=(2, 2))(drop4)
 
 		conv5 = Conv2D(256, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(pool3)
 		conv5 = Conv2D(256, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv5)
 		drop5 = AlphaDropout(0.3)(conv5)
 
-		# up6 = Conv2D(512, 2, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(UpSampling2D(size = (2,2))(drop5))
-		# merge6 = merge([drop4,up6], mode = 'concat', concat_axis = 3)
-		# conv6 = Conv2D(512, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(merge6)
-		# conv6 = Conv2D(512, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv6)
 
 		up7 = Conv2D(128, 2, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(UpSampling2D(size = (2,2))(drop5))
 		merge7 = merge([conv3,up7], mode = 'concat', concat_axis = 3)

@@ -206,8 +206,24 @@ class dataProcess(object):
         print('Saving to .npy files done.')
 
 
-    def prepare_unmakked_test_data(self):
-        pass
+    def prepare_unmarked_test_data(self):
+        in_path = "data\\test\\raw"
+        out_path = "data\\test\\images"
+        images = glob.glob(in_path + "\\*.jpg")
+        for imgname in images:
+            midname = imgname[imgname.rindex("\\") + 1:imgname.rindex(".jpg")]
+            img = cv2.imread(imgname)
+            h, w = img.shape[0], img.shape[1]
+            top = bottom = int((max(w, h) - h) / 2)
+            left = right = int((max(w, h) - w) / 2)
+            img = cv2.copyMakeBorder(img, top, bottom, left, right, cv2.BORDER_CONSTANT, value=[0, 0, 0])
+            img = cv2.resize(img, (self.out_cols, self.out_rows))
+
+            img = rgb2Gray(img)
+            img = img[..., 0]
+            cv2.imwrite(out_path + "\\" + midname + "." + self.img_type, img)
+
+
 
     def prepare_marked_test_data(self):
         path_merge = "data\\train\\merge"
@@ -283,7 +299,7 @@ if __name__ == "__main__":
     # aug.splitMerge()
     # aug.splitTransform()
     mydata = dataProcess(512, 512)
-    mydata.prepare_test_data()
+    mydata.prepare_unmarked_test_data()
     # mydata.create_train_data()
     mydata.create_test_data()
 # imgs_train,imgs_mask_train = mydata.load_train_data()
